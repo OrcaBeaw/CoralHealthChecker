@@ -8,8 +8,8 @@ Original file is located at
 """
 
 # Commented out IPython magic to ensure Python compatibility.
-!pip install tensorflow #install tensorflow
-!git clone https://github.com/OrcaBeaw/CapstoneC964_AliothDuran.git #clone git
+#!pip install tensorflow #install tensorflow
+#!git clone https://github.com/OrcaBeaw/CapstoneC964_AliothDuran.git #clone git
 # %cd CapstoneC964_AliothDuran #change to folder
 
 #import necessary libraries
@@ -66,7 +66,7 @@ first_image = image_batch[0]
 print(np.min(first_image), np.max(first_image))
 
 #data augmentation
-!pip install keras
+#!pip install keras
 from tensorflow import keras
 data_augmentation = keras.Sequential(
   [
