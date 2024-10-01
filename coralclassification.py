@@ -24,18 +24,26 @@ st.write("Feel free to upload your own coral images or paste the url of an image
 
 # Input for Image URL OR upload image
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+coral_url = st.text_input("Enter the URL of a coral image", "")
+
 if uploaded_file is not None:
+  if st.button("Classify Coral - Image Upload", key="upload_button"):
     img = Image.open(uploaded_file)
     img = img.resize((180, 180))
     st.image(img, caption="Uploaded Coral Image", use_column_width=True)
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
 
+    # Make predictions
+    predictions = model.predict(img_array)
+    score = tf.nn.softmax(predictions[0])
+
     # Display image
     st.image(img, caption="Uploaded Coral Image", use_column_width=True)
+    st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
 
-coral_url = st.text_input("Enter the URL of a coral image", "")
-if st.button("Classify Coral"):
+
+elif coral_url:
     try:
         # Download the image using requests
         response = requests.get(coral_url)
