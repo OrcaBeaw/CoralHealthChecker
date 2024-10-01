@@ -34,15 +34,6 @@ if uploaded_file is not None:
     # Display image
     st.image(img, caption="Uploaded Coral Image", use_column_width=True)
 
-    if st.button("Classify Coral"):
-        # Make predictions
-        predictions = model.predict(img_array)
-        score = tf.nn.softmax(predictions[0])
-
-        # Display classification result
-        st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
-
-
 coral_url = st.text_input("Enter the URL of a coral image", "")
 if st.button("Classify Coral"):
     try:
