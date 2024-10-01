@@ -43,7 +43,7 @@ if uploaded_file is not None:
         st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
 
 
-coral_url = st.text_input("Enter the URL of a coral image", "https://i0.wp.com/sitn.hms.harvard.edu/wp-content/uploads/2021/05/coral-bleaching.jpeg?resize=1500%2C768&ssl=1")
+coral_url = st.text_input("Enter the URL of a coral image", "")
 if st.button("Classify Coral"):
     try:
         # Download the image using requests
