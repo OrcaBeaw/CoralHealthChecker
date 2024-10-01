@@ -38,8 +38,7 @@ if uploaded_file is not None:
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
-    # Display image
-    st.image(img, caption="Uploaded Coral Image", use_column_width=True)
+    # Verdict
     st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
 
 
