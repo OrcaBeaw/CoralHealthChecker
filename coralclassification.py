@@ -2,8 +2,6 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
-import requests
-from io import BytesIO
 
 # Load the trained model
 @st.cache(allow_output_mutation=True)
@@ -19,28 +17,23 @@ class_names = ['Bleached', 'Healthy']
 # Streamlit App Title
 st.title("Coral Health Classification App")
 
-# Input for Image URL
-coral_url = st.text_input("Enter the URL of a coral image", "https://i0.wp.com/sitn.hms.harvard.edu/wp-content/uploads/2021/05/coral-bleaching.jpeg?resize=1500%2C768&ssl=1")
+# Allow user to upload an image file
+uploaded_file = st.file_uploader("Choose an image file", type=["jpg", "png", "jpeg"])
 
-if st.button("Classify Coral"):
-    try:
-        # Download the image using requests
-        response = requests.get(coral_url)
+if uploaded_file is not None:
+    # Load and display the uploaded image
+    img = Image.open(uploaded_file)
+    img = img.resize((180, 180))  # Resize to match model input size
+    img_array = tf.keras.utils.img_to_array(img)
+    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
 
-        if response.status_code == 200:
-            img = Image.open(BytesIO(response.content))
-            img = img.resize((180, 180))
-            img_array = tf.keras.utils.img_to_array(img)
-            img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
+    # Display the uploaded image
+    st.image(img, caption="Uploaded Coral Image", use_column_width=True)
 
-            # Make predictions
-            predictions = model.predict(img_array)
-            score = tf.nn.softmax(predictions[0])
+    if st.button("Classify Coral"):
+        # Make predictions
+        predictions = model.predict(img_array)
+        score = tf.nn.softmax(predictions[0])
 
-            # Display the image and classification result
-            st.image(img, caption="Uploaded Coral Image", use_column_width=True)
-            st.write(f"This image most likely belongs to **{class_names[np.argmax(score)]}** with a **{100 * np.max(score):.2f}%** confidence.")
-        else:
-            st.write("Failed to retrieve the image. Please check the URL.")
-    except Exception as e:
-        st.write("Error loading model or classifying image:", e)
+        # Display the result
+        st.write(f"This image most likely belongs to **{class_names[np.argmax(score)]}** with a **{100 * np.max(score):.2f}%** confidence.")
