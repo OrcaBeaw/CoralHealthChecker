@@ -1,17 +1,21 @@
-import streamlit as st
-import tensorflow as tf
 import numpy as np
 from PIL import Image
 import requests
 from io import BytesIO
+import streamlit as st
+import tensorflow as tf
 
-# Load the trained model
-@st.cache(allow_output_mutation=True)
+@st.cache_resource(show_spinner=False)
 def load_model():
-    model = tf.keras.models.load_model("my_model.keras")
-    return model
+    try:
+        model = tf.keras.models.load_model("my_model.keras")
+        return model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        raise
 
 model = load_model()
+
 
 # Define class names
 class_names = ['Bleached', 'Healthy']
