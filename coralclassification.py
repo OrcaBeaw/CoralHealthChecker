@@ -8,7 +8,7 @@ from io import BytesIO
 # Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model("my_model.keras")  # Make sure the file is in the same directory
+    model = tf.keras.models.load_model("models/my_model.keras")
     return model
 
 model = load_model()
