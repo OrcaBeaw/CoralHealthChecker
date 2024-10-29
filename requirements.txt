@@ -1,6 +1,6 @@
-streamlit==1.39.0
-tensorflow==2.11.0  # Use the TensorFlow version from Colab
-Pillow==9.4.0
-requests==2.26.0
-numpy==1.21.6
-pandas==1.3.4
+streamlit
+tensorflow
+Pillow
+requests
+numpy
+pandas
