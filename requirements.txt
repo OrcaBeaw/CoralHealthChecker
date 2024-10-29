@@ -1,6 +1,4 @@
-streamlit
-tensorflow
-Pillow
-requests
-numpy
-pandas
+tensorflow==2.11.0
+streamlit==1.11.0
+pillow==9.1.0
+requests==2.26.0
