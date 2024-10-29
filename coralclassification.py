@@ -8,7 +8,7 @@ from io import BytesIO
 # Load the trained model
 @st.cache(allow_output_mutation=True)
 def load_model():
-    model = tf.keras.models.load_model("my_model.keras")
+    model = tf.keras.models.load_model("my_model.keras")  # Make sure the file is in the same directory
     return model
 
 model = load_model()
@@ -18,32 +18,11 @@ class_names = ['Bleached', 'Healthy']
 
 # Streamlit App Title
 st.title("Coral Health Classification App")
-st.write("This app classifies coral images into two categories: **Bleached** and **Healthy**.")
-st.write("It was developed using python, tensorflow, and streamlit.")
-st.write("Feel free to upload your own coral images or paste the url of an image!")
 
-# Input for Image URL OR upload image
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-coral_url = st.text_input("Enter the URL of a coral image", "")
+# Input for Image URL
+coral_url = st.text_input("Enter the URL of a coral image", "https://i0.wp.com/sitn.hms.harvard.edu/wp-content/uploads/2021/05/coral-bleaching.jpeg?resize=1500%2C768&ssl=1")
 
-if uploaded_file is not None:
-  if st.button("Classify Coral - Image Upload", key="upload_button"):
-    img = Image.open(uploaded_file)
-    img = img.resize((180, 180))
-    st.image(img, caption="Uploaded Coral Image", use_column_width=True)
-    img_array = tf.keras.utils.img_to_array(img)
-    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
-
-    # Make predictions
-    predictions = model.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
-
-    # Display image
-    st.image(img, caption="Uploaded Coral Image", use_column_width=True)
-    st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
-
-
-elif coral_url:
+if st.button("Classify Coral"):
     try:
         # Download the image using requests
         response = requests.get(coral_url)
@@ -60,7 +39,7 @@ elif coral_url:
 
             # Display the image and classification result
             st.image(img, caption="Uploaded Coral Image", use_column_width=True)
-            st.write(f"This image represents a **{class_names[np.argmax(score)]}** coral, with a **{100 * np.max(score):.2f}%** confidence.")
+            st.write(f"This image most likely belongs to **{class_names[np.argmax(score)]}** with a **{100 * np.max(score):.2f}%** confidence.")
         else:
             st.write("Failed to retrieve the image. Please check the URL.")
     except Exception as e:
